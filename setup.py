@@ -13,7 +13,7 @@ with open('LICENSE.txt') as f:
 
 setup(
     name='pypassvault',
-    version='0.1.0',
+    version='0.1.1',
     description='A simple commandline password vault written in python.',
     long_description=readme,
     author='cryptbytestech',
@@ -61,7 +61,6 @@ setup(
         'passlib==1.7.1',
         'appdirs==1.4.3',
         'cryptography==1.8.1',
-        #'core==1.0.1',
     ],
 
     # List additional groups of dependencies here (e.g. development
@@ -71,6 +70,9 @@ setup(
     extras_require={
     #    'dev': [],
     #    'test': [],
+    },
+    entry_points = {
+        'console_scripts': ['passvault=pypassvault.passvault:main'],
     },
 )
 

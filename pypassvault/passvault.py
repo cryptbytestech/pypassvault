@@ -1,4 +1,4 @@
-#passvalult v0.1.0
+#passvalult v0.1.1
 #Description: A simple commandline password vault written in python.
 #https://opensource.org/licenses/MIT
 #Copyright 2018 cryptbytestech
@@ -45,7 +45,7 @@ def configure(c,confdir=""):
     appname = str(sys.argv[0]).replace(".py","")
     c.config["appname"] = appname
     if confdir == "":
-        version = "0.1.0"
+        version = "0.1.1"
         dirs = AppDirs(appname, "cryptbytestech",version=version)
         confdir = dirs.user_data_dir
         c.config["appname"] = appname
@@ -157,11 +157,13 @@ def get(c,user,appname="passvault"):
         passwd = f.decrypt(token)
         print(passwd.decode())
 
-if __name__== "__main__":
+def main():
     ns = Collection()
     ns.add_task(get)
     ns.add_task(setpasswd)
     ns.add_task(configure)
     ns.add_task(list)
-    program = Program(version='0.1.0',namespace=ns)
+    program = Program(version='0.1.1',namespace=ns)
     program.run()
+if __name__== "__main__":
+    main()
