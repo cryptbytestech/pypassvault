@@ -61,7 +61,7 @@ setup(
         'passlib==1.7.1',
         'appdirs==1.4.3',
         'cryptography==1.8.1',
-        'core==1.0.1',
+        #'core==1.0.1',
     ],
 
     # List additional groups of dependencies here (e.g. development
