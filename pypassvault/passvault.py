@@ -23,6 +23,15 @@ from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+import re
+
+# Version & AUTHOR of passvalult
+VERSION = "0.1.1"
+AUTHOR = "cryptbytestech"
+
+def find_version(vstr):
+    m = re.findall(r'(?:(\d+\.(?:\d+\.)*\d+))', vstr)
+    return m
 
 def encode_passwd(password,salt=""):
     "Encode password to generate a symmetric key"
@@ -42,21 +51,27 @@ def encode_passwd(password,salt=""):
 @task
 def configure(c,confdir=""):
     "Set the configuration"
-    appname = str(sys.argv[0]).replace(".py","")
+    base_name = os.path.basename(sys.argv[0])
+    appname = str(base_name).replace(".py","")
     c.config["appname"] = appname
+    c.config["version"] = VERSION
+    version = VERSION
     if confdir == "":
-        version = "0.1.1"
-        dirs = AppDirs(appname, "cryptbytestech",version=version)
+        dirs = AppDirs(appname, AUTHOR)
         confdir = dirs.user_data_dir
-        c.config["appname"] = appname
+        #print(confdir)
+
     if not os.path.isdir(confdir):
         logging.warning("Creating config dir %s"%(confdir))
         os.makedirs(confdir)
     conffile = os.path.join(confdir,"conf.db")
     c.config["confdir"] = confdir
     c.config["conffile"] = conffile
+
     with shelve.open(conffile) as app:
         vp = ""
+        app["appname"] = c.config["appname"]
+        app["version"] = c.config["version"]
         if not "app_hash" in app:
             logging.warning("Creating config file %s"%(conffile))
             logging.warning("Valut Password not set, please set now")
@@ -98,8 +113,9 @@ def list(c,appname=""):
                 exit()
             appnames = [appname]
         else:
-            appnames = app["apps"].keys()
-            print("List of all applications",appnames)
+            appnames = [key for key in app["apps"].keys()]
+            print("List of all applications:")
+            pprint.pprint(appnames)
         for appname in appnames:
             print("Users for application %s are:"%(appname))
             pprint.pprint(app["apps"][appname])
@@ -163,7 +179,7 @@ def main():
     ns.add_task(setpasswd)
     ns.add_task(configure)
     ns.add_task(list)
-    program = Program(version='0.1.1',namespace=ns)
+    program = Program(version=VERSION,namespace=ns)
     program.run()
 if __name__== "__main__":
     main()
