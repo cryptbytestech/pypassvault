@@ -57,10 +57,10 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'invoke==0.19.0',
-        'passlib==1.7.1',
-        'appdirs==1.4.3',
-        'cryptography==1.8.1',
+        'invoke>=0.19.0',
+        'passlib>=1.7.1',
+        'appdirs>=1.4.3',
+        'cryptography>=1.8.1',
     ],
 
     # List additional groups of dependencies here (e.g. development
