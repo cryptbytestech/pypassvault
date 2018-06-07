@@ -26,7 +26,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import re
 
 # Version & AUTHOR of passvalult
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 AUTHOR = "cryptbytestech"
 
 def find_version(vstr):
