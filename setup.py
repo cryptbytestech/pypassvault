@@ -13,13 +13,15 @@ with open('LICENSE.txt') as f:
 
 setup(
     name='pypassvault',
-    version='0.1.3',
+    version='0.1.4',
     description='A simple commandline password vault written in python.',
     long_description=readme,
+    long_description_content_type='text/markdown',
     author='cryptbytestech',
     author_email='cryptbytestech@gmail.com',
     url='https://github.com/cryptbytestech/pypassvault',
-    license=license,
+    #license=license,
+    license="MIT",
     #packages=find_packages(exclude=('tests', 'docs'))
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[

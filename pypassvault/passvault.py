@@ -7,6 +7,7 @@
 #The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 import shelve
 from passlib.hash import argon2
 from invoke import task,Collection,Program
@@ -26,7 +27,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import re
 
 # Version & AUTHOR of passvault
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 AUTHOR = "cryptbytestech"
 
 def find_version(vstr):
@@ -97,6 +98,37 @@ def configure(c,confdir=""):
                     exit()
         c.config["conffile"] = conffile
         c.config["passwd"] = vp
+
+@task(pre=[configure])
+def delete(c,user="",appname="passvault"):
+    "Delete password details for a username and/or application (optional)"
+    config = c.config
+    with shelve.open(config["conffile"]) as tapp:
+        app = {"apps":tapp["apps"],"passwds":tapp["passwds"]}
+        if not appname in app["apps"]:
+            logging.error("No application with name %s is present"%(appname))
+            exit()
+        if not appname in app["passwds"]:
+            logging.error("No application with name %s is present"%(appname))
+            exit()
+        if user == "":
+            print("Deleting all details for application %s"%(appname))
+            del app["passwds"][appname]
+            del app["apps"][appname]
+        elif not user in app["passwds"][appname]:
+            logging.error("No user with name %s is present in %s"%(user,appname))
+            exit()
+        else:
+            print("Deleting all details of user %s for application %s"%(user ,appname))
+            del app["passwds"][appname][user]
+            app["apps"][appname].remove(user)
+
+        logging.info("Deleting your password from vault")
+        tapp["apps"] = app["apps"]
+        tapp["passwds"] = app["passwds"]
+
+            
+
 
 @task(pre=[configure])
 def list(c,appname=""):
@@ -179,6 +211,7 @@ def main():
     ns.add_task(setpasswd)
     ns.add_task(configure)
     ns.add_task(list)
+    ns.add_task(delete)
     program = Program(version=VERSION,namespace=ns)
     program.run()
 if __name__== "__main__":
