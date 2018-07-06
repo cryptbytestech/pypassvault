@@ -13,7 +13,7 @@ with open('LICENSE.txt') as f:
 
 setup(
     name='pypassvault',
-    version='0.1.2',
+    version='0.1.3',
     description='A simple commandline password vault written in python.',
     long_description=readme,
     author='cryptbytestech',

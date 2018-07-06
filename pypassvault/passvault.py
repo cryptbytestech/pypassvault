@@ -1,4 +1,4 @@
-#passvalult v0.1.1
+#passvault v0.1.1
 #Description: A simple commandline password vault written in python.
 #https://opensource.org/licenses/MIT
 #Copyright 2018 cryptbytestech
@@ -25,8 +25,8 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import re
 
-# Version & AUTHOR of passvalult
-VERSION = "0.1.2"
+# Version & AUTHOR of passvault
+VERSION = "0.1.3"
 AUTHOR = "cryptbytestech"
 
 def find_version(vstr):
@@ -74,11 +74,11 @@ def configure(c,confdir=""):
         app["version"] = c.config["version"]
         if not "app_hash" in app:
             logging.warning("Creating config file %s"%(conffile))
-            logging.warning("Valut Password not set, please set now")
-            np = getpass.getpass(prompt='Set a valult password: ')
+            logging.warning("Vault Password not set, please set now")
+            np = getpass.getpass(prompt='Set a vault password: ')
             # generate new salt, hash password
             phash = argon2.using(rounds=4).hash(np)
-            vp = getpass.getpass(prompt='Re-enter valult password: ')
+            vp = getpass.getpass(prompt='Re-enter vault password: ')
             # verify password
             if not argon2.verify(vp, phash):
                 logging.error("Vault Password verification failed. Try Again")
@@ -90,7 +90,7 @@ def configure(c,confdir=""):
         else:
             with shelve.open(conffile) as app:
                 phash = app["app_hash"]
-                vp = getpass.getpass(prompt='Enter valult password: ')
+                vp = getpass.getpass(prompt='Enter vault password: ')
                 # verify password
                 if not argon2.verify(vp, phash):
                     logging.error("Password verification failed. Try Again")
