@@ -113,6 +113,11 @@ passvault -V or passvault --version
 - Password expiration notification/reminder
 - UI for pypassvault
 - Cloud Backup & Sync of Vault File
+- Automatic vault locking after inactivity feature after some time
+- Support for more methods to access the api via ssh or http
+- Clipboard cleared automatically
+- Possibility to create an unlimited number of vaults
+- Improve command line interface
 
 ## LICENSE
 
